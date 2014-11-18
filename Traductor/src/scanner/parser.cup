@@ -1,0 +1,38 @@
+package scanner;
+import java_cup.runtime.*;
+
+parser code{:
+    public void syntax_error(Symbol str){
+        Token newToken = (Token) str.value;
+        report_error("Error Sintáctico en: " + newToken.getValue() + " Línea: " + newToken.getLine()
+                    + " Columna: " + newToken.getCol()+"\n", null);
+    }
+:}
+
+action code{:
+    public void imprimirValor(String str){
+        System.out.println("El valor del token es: " + str);
+    }
+:}
+
+//NO TERMINALES
+non terminal    ORACIONES;                              //Da inicio al análisis
+non terminal    ENUNCIATIVA, NEGATIVA;            //Tipos de oraciones
+non terminal    SUJETO,PREDICADO;
+
+//TERMINALES
+terminal Token VERBO,PRONOMBRE,SUSTANTIVO,ADVERBIO,ADJETIVO,PREPOSICION;
+terminal Token ARTICULO,NOMBRE_PROPIO;
+terminal Token NEGACION;
+
+//GRAMÁTICA
+ORACIONES ::= ENUNCIATIVA | NEGATIVA; //Define los tipos de oraciones para traducir
+ENUNCIATIVA ::= SUJETO PREDICADO;
+NEGATIVA ::= SUJETO ;
+
+SUJETO ::= ARTICULO SUSTANTIVO | NOMBRE_PROPIO | PRONOMBRE | SUSTANTIVO; //Verificar si sustantivo solo
+PREDICADO ::= VERBO | VERBO ARTICULO SUSTANTIVO; //alternativas de generar un predicado
+
+ 
+
+
